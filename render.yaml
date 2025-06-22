@@ -9,7 +9,7 @@ services:
     name: growthroom
     env: python
     buildCommand: rm -rf staticfiles && pip install -r requirements.txt && python manage.py collectstatic --noinput
-    startCommand: python manage.py migrate && python manage.py createsu && gunicorn growthroom.wsgi:application
+    startCommand: python manage.py migrate && python manage.py createsuperuser && gunicorn growthroom.wsgi:application
     pythonVersion: '3.12'
     plan: free
     envVars:
@@ -21,6 +21,8 @@ services:
         generateValue: true
       - key: WEB_CONCURRENCY
         value: 4
+      - key: ALLOWED_HOSTS
+        value: growthroom.onrender.com
       - key: DJANGO_SUPERUSER_USERNAME
         value: admin
       - key: DJANGO_SUPERUSER_EMAIL
