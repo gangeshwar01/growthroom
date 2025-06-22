@@ -9,8 +9,6 @@ services:
     name: growthroom
     runtime: python
     pythonVersion: '3.12'
-    buildCommand: "./build.sh"
-    startCommand: "gunicorn growthroom.wsgi:application"
     plan: free
     envVars:
       - key: DATABASE_URL
@@ -27,6 +25,3 @@ services:
         value: admin@growthroom.com
       - key: DJANGO_SUPERUSER_PASSWORD
         value: admin
-    postDeployCommand: |
-      python manage.py migrate
-      python manage.py createsuperuser --noinput --username admin --email admin@growthroom.com || true 
