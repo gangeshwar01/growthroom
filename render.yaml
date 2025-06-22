@@ -9,7 +9,7 @@ services:
     name: growthroom
     env: python
     buildCommand: rm -rf staticfiles && pip install -r requirements.txt && python manage.py collectstatic --noinput
-    startCommand: python manage.py migrate && python manage.py createsu && gunicorn employee_portal.wsgi:application
+    startCommand: python manage.py migrate && python manage.py createsu && gunicorn growthroom.wsgi:application
     pythonVersion: '3.12'
     plan: free
     envVars:
