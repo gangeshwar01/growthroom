@@ -19,7 +19,7 @@
                         {% csrf_token %}
                         
                         <div class="mb-3">
-                            <label for="{{ form.user.id_for_label }}" class="form-label">User</label>
+                            <label for="{{ form.user.id_for_label }}" class="form-label">User ID</label>
                             {{ form.user }}
                             {% if form.user.errors %}
                             <div class="invalid-feedback d-block">
