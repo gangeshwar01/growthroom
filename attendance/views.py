@@ -81,7 +81,7 @@ def attendance_list(request):
         if selected_user_id:
             records = AttendanceRecord.objects.filter(user_id=selected_user_id).select_related('user').order_by('-date', '-check_in')
         else:
-        records = AttendanceRecord.objects.all().select_related('user').order_by('-date', '-check_in')
+            records = AttendanceRecord.objects.all().select_related('user').order_by('-date', '-check_in')
     else:
         records = AttendanceRecord.objects.filter(user=request.user).order_by('-date', '-check_in')
     
