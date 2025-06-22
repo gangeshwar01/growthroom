@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}My Performance{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h3 class="mb-4">My Performance</h3>
+
+    <!-- Performance Analytics Section -->
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">This Week's Performance</h5>
+                    <p class="card-text display-4">{{ weekly_performance|floatformat:2|default:"N/A" }}</p>
+                    <small class="text-muted">Average rating out of 10</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">This Month's Performance</h5>
+                    <p class="card-text display-4">{{ monthly_performance|floatformat:2|default:"N/A" }}</p>
+                    <small class="text-muted">Average rating out of 10</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Performance Reviews Table -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">All My Reviews</h5>
+            {% if performance_reviews %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Review Date</th>
+                            <th>Rating</th>
+                            <th>Feedback</th>
+                            <th>Reviewer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for review in performance_reviews %}
+                        <tr>
+                            <td>{{ review.task.title }}</td>
+                            <td>{{ review.review_date|date:"M d, Y" }}</td>
+                            <td>
+                                <span class="badge 
+                                    {% if review.rating >= 8 %} bg-success
+                                    {% elif review.rating >= 5 %} bg-warning
+                                    {% else %} bg-danger
+                                    {% endif %}">
+                                    {{ review.rating }}/10
+                                </span>
+                            </td>
+                            <td>{{ review.feedback }}</td>
+                            <td>{{ review.reviewer.username|default:"N/A" }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <p>You don't have any performance reviews yet.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

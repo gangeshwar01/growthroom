@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Main Session Card -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="mb-0">{{ session.title }}</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5 class="text-muted mb-3">Session Details</h5>
+                            <div class="list-group">
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Date</h6>
+                                        <span>{{ session.date|date:"F d, Y" }}</span>
+                                    </div>
+                                </div>
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Time</h6>
+                                        <span>{{ session.time|time:"H:i" }}</span>
+                                    </div>
+                                </div>
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Topic</h6>
+                                        <span class="badge badge-info">{{ session.topic }}</span>
+                                    </div>
+                                </div>
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Meeting Link</h6>
+                                        <a href="{{ session.meeting_link }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-external-link-alt mr-1"></i> Join
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="text-muted mb-3">Description</h5>
+                            <p class="mb-0">{{ session.description }}</p>
+                        </div>
+                    </div>
+
+                    {% if session.resources %}
+                    <div class="mt-4">
+                        <h5 class="text-muted mb-3">Resources</h5>
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                {{ session.resources|linebreaks }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <!-- Actions Card -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        {% if request.user.is_superuser or request.user.is_staff %}
+                        <a href="{% url 'training:session_update' session.pk %}" class="btn btn-warning">
+                            <i class="fas fa-edit mr-2"></i> Edit Session
+                        </a>
+                        <a href="{% url 'training:session_delete' session.pk %}" class="btn btn-danger">
+                            <i class="fas fa-trash mr-2"></i> Delete Session
+                        </a>
+                        {% endif %}
+                        <a href="{% url 'training:session_list' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left mr-2"></i> Back to List
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Attendance Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Attendance</h5>
+                </div>
+                <div class="card-body p-0">
+                    {% if session.trainingattendance_set.all %}
+                    <div class="list-group list-group-flush">
+                        {% for attendance in session.trainingattendance_set.all %}
+                        <div class="list-group-item">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-primary text-white mr-3" style="width: 40px; height: 40px;">
+                                    {{ attendance.user.username|make_list|first|upper }}
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">{{ attendance.user.get_full_name|default:attendance.user.username }}</h6>
+                                    <small class="text-muted">
+                                        {% if attendance.attended %}
+                                        <span class="text-success">Attended</span>
+                                        {% else %}
+                                        <span class="text-danger">Not Attended</span>
+                                        {% endif %}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <p class="text-muted mb-0">No attendance records</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.avatar-circle {
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+</style>
+{% endblock %} 

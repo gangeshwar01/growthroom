@@ -1,0 +1,7 @@
+<h2>Performance Entry Detail</h2>
+<p>User: {{ entry.user.username }}</p>
+<p>Week/Month: {{ entry.week_month }}</p>
+<p>Feedback: {{ entry.feedback }}</p>
+<p>Score: {{ entry.score }}</p>
+<a href="{% url 'performance_update' entry.pk %}">Update Entry</a>
+<a href="{% url 'performance_delete' entry.pk %}">Delete Entry</a> 

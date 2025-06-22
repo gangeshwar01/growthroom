@@ -1,0 +1,11 @@
+Django==4.2.10
+django-crispy-forms==2.1
+crispy-bootstrap5==2024.2
+python-dotenv==1.0.1
+django-widget-tweaks==1.5.0
+django-filter==23.5
+django-tables2==2.7.0
+gunicorn==22.0.0
+dj-database-url==2.1.0
+psycopg2-binary==2.9.9
+whitenoise[brotli]==6.6.0 

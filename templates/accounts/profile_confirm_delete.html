@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">Delete Profile</h4>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="avatar-circle bg-danger text-white mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
+                            {{ profile.user.username|make_list|first|upper }}
+                        </div>
+                        <h5>{{ profile.user.get_full_name|default:profile.user.username }}</h5>
+                        <p class="text-muted">{{ profile.role|default:"No role specified" }}</p>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                        Are you sure you want to delete this employee's profile? This action cannot be undone.
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="text-right">
+                            <a href="{% url 'accounts:profile_detail' profile.pk %}" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash mr-1"></i> Delete Profile
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.avatar-circle {
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+</style>
+{% endblock %} 

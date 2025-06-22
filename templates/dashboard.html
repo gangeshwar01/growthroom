@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    body, .dashboard-bg {
+        background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
+        min-height: 100vh;
+    }
+    .dashboard-card {
+        border: none;
+        border-radius: 1.2rem;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+        transition: transform 0.15s, box-shadow 0.15s;
+        background: #fff;
+        min-height: 160px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .dashboard-card:hover {
+        transform: translateY(-6px) scale(1.03);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    }
+    .dashboard-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+    }
+    .dashboard-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0;
+    }
+    .dashboard-welcome {
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+    @media (max-width: 767px) {
+        .dashboard-card { min-height: 120px; }
+    }
+</style>
+<div class="dashboard-bg py-5">
+    <div class="container">
+        <div class="dashboard-welcome">
+            <h1 class="display-5 fw-bold mb-2">Welcome to Growth Room</h1>
+            <p class="lead text-muted mb-0">Your all-in-one platform for employee growth, management, and support.</p>
+        </div>
+        <div class="row g-4 justify-content-center">
+            <div class="col-12 col-sm-6 col-lg-4">
+                <a href="/accounts/" class="dashboard-card text-primary text-decoration-none h-100">
+                    <span class="dashboard-icon"><i class="fas fa-users"></i></span>
+                    <span class="dashboard-title">Accounts & Profiles</span>
+                </a>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-4">
+                <a href="/attendance/" class="dashboard-card text-success text-decoration-none h-100">
+                    <span class="dashboard-icon"><i class="fas fa-calendar-check"></i></span>
+                    <span class="dashboard-title">Work & Attendance</span>
+                </a>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-4">
+                <a href="/training/" class="dashboard-card text-info text-decoration-none h-100">
+                    <span class="dashboard-icon"><i class="fas fa-chalkboard-teacher"></i></span>
+                    <span class="dashboard-title">Training & Development</span>
+                </a>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-4">
+                <a href="/tasks/" class="dashboard-card text-warning text-decoration-none h-100">
+                    <span class="dashboard-icon"><i class="fas fa-tasks"></i></span>
+                    <span class="dashboard-title">Tasks & Projects</span>
+                </a>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-4">
+                <a href="/performance/" class="dashboard-card text-secondary text-decoration-none h-100">
+                    <span class="dashboard-icon"><i class="fas fa-chart-line"></i></span>
+                    <span class="dashboard-title">Performance & Progress</span>
+                </a>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-4">
+                <a href="{% url 'certificates:certificate_list' %}" class="dashboard-card text-warning text-decoration-none h-100">
+                    <span class="dashboard-icon"><i class="fas fa-certificate"></i></span>
+                    <span class="dashboard-title">Certificates</span>
+                </a>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="dashboard-card text-danger text-decoration-none h-100" id="support-contact-card" style="cursor:pointer;" onclick="toggleSupportButtons()">
+                    <span class="dashboard-icon"><i class="fas fa-headset"></i></span>
+                    <span class="dashboard-title">Support & Contact</span>
+                    <div id="support-buttons" style="display:none; margin-top: 1rem; width: 100%;">
+                        <div class="d-flex flex-column align-items-center w-100">
+                            <a href="mailto:ZikRmeofficial@gmail.com" class="btn btn-outline-primary mb-2 w-75">
+                                <i class="fas fa-envelope"></i> Email
+                            </a>
+                            <a href="https://api.whatsapp.com/send/?phone=7310624101&text&type=phone_number&app_absent=0" target="_blank" class="btn btn-outline-success w-75">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+<script>
+function toggleSupportButtons() {
+  var btns = document.getElementById('support-buttons');
+  btns.style.display = (btns.style.display === 'none' || btns.style.display === '') ? 'block' : 'none';
+}
+</script>
+
+{% endblock %} 

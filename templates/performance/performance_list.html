@@ -1,0 +1,7 @@
+<h2>Performance Entry List</h2>
+<ul>
+    {% for entry in entries %}
+        <li><a href="{% url 'performance_detail' entry.pk %}">{{ entry.user.username }} - {{ entry.week_month }}</a></li>
+    {% endfor %}
+</ul>
+<a href="{% url 'performance_create' %}">Create New Performance Entry</a> 

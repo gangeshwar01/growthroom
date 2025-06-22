@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Performance Overview{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">All Performance Reviews</h4>
+            <a href="{% url 'performance:performance_review_create' %}" class="btn btn-primary btn-sm">
+                <i class="fas fa-plus"></i> Add Review
+            </a>
+        </div>
+        <div class="card-body">
+            {% if reviews %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Task</th>
+                            <th>Rating</th>
+                            <th>Review Date</th>
+                            <th>Reviewer</th>
+                            <th>Feedback</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for review in reviews %}
+                        <tr>
+                            <td>{{ review.employee.username }}</td>
+                            <td>{{ review.task.title }}</td>
+                            <td>
+                                <span class="badge 
+                                    {% if review.rating >= 8 %} bg-success
+                                    {% elif review.rating >= 5 %} bg-warning
+                                    {% else %} bg-danger
+                                    {% endif %}">
+                                    {{ review.rating }}/10
+                                </span>
+                            </td>
+                            <td>{{ review.review_date|date:"M d, Y" }}</td>
+                            <td>{{ review.reviewer.username|default:"N/A" }}</td>
+                            <td>{{ review.feedback|truncatewords:20 }}</td>
+                            <td>
+                                <a href="{% url 'performance:performance_review_update' review.pk %}" class="btn btn-sm btn-outline-primary py-0 px-1">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'performance:performance_review_delete' review.pk %}" class="btn btn-sm btn-outline-danger py-0 px-1">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <p>No performance reviews have been created yet.</p>
+                <a href="{% url 'performance:performance_review_create' %}" class="btn btn-primary">Create the First Review</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

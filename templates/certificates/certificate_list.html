@@ -1,0 +1,7 @@
+<h2>Certificate Request List</h2>
+<ul>
+    {% for certificate in certificates %}
+        <li><a href="{% url 'certificate_detail' certificate.pk %}">{{ certificate.user.username }} - {{ certificate.type }}</a></li>
+    {% endfor %}
+</ul>
+<a href="{% url 'certificate_create' %}">Create New Certificate Request</a> 

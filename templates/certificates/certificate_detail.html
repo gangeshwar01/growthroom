@@ -1,0 +1,6 @@
+<h2>Certificate Request Detail</h2>
+<p>User: {{ certificate.user.username }}</p>
+<p>Type: {{ certificate.type }}</p>
+<p>Status: {{ certificate.status }}</p>
+<a href="{% url 'certificate_update' certificate.pk %}">Update Request</a>
+<a href="{% url 'certificate_delete' certificate.pk %}">Delete Request</a> 

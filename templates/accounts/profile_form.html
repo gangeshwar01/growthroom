@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        {% if form.instance.pk %}
+                        Edit Employee Profile
+                        {% else %}
+                        Add New Employee
+                        {% endif %}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.user.id_for_label }}" class="form-label">User</label>
+                            {{ form.user }}
+                            {% if form.user.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.user.errors|striptags }}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.bio.label_tag }}
+                            {{ form.bio }}
+                             {% if form.bio.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.bio.errors|striptags }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.role.label_tag }}
+                            {{ form.role }}
+                             {% if form.role.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.role.errors|striptags }}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mt-4 d-flex justify-content-end">
+                            <a href="{% url 'accounts:profile_list' %}" class="btn btn-secondary me-2">Cancel</a>
+                            <button type="submit" class="btn btn-primary">
+                                {% if form.instance.pk %}
+                                Update Profile
+                                {% else %}
+                                Create Profile
+                                {% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.form-control {
+    border-radius: 0.25rem;
+}
+
+textarea.form-control {
+    min-height: 100px;
+}
+
+.invalid-feedback {
+    display: block;
+}
+</style>
+{% endblock %} 

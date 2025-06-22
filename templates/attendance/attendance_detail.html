@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Main Record Card -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="mb-0">Attendance Record</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5 class="text-muted mb-3">Employee Information</h5>
+                            <div class="d-flex align-items-center mb-4">
+                                <div class="avatar-circle bg-primary text-white mr-3" style="width: 60px; height: 60px; font-size: 1.5rem;">
+                                    {{ record.user.username|make_list|first|upper }}
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">{{ record.user.get_full_name|default:record.user.username }}</h5>
+                                    <p class="text-muted mb-0">{{ record.user.email }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="text-muted mb-3">Attendance Details</h5>
+                            <div class="list-group">
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Date</h6>
+                                        <span>{{ record.date|date:"F d, Y" }}</span>
+                                    </div>
+                                </div>
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Status</h6>
+                                        <span>
+                                            {% if record.status == 'present' %}
+                                            <span class="badge badge-success">Present</span>
+                                            {% elif record.status == 'remote' %}
+                                            <span class="badge badge-info">Remote</span>
+                                            {% else %}
+                                            <span class="badge badge-danger">Absent</span>
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Check In</h6>
+                                        <span>{{ record.check_in|time:"H:i"|default:"-" }}</span>
+                                    </div>
+                                </div>
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Check Out</h6>
+                                        <span>{{ record.check_out|time:"H:i"|default:"-" }}</span>
+                                    </div>
+                                </div>
+                                {% if record.check_in and record.check_out %}
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Duration</h6>
+                                        <span>{{ record.check_out|timeuntil:record.check_in }}</span>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notes Section -->
+            {% if record.notes %}
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Notes</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">{{ record.notes }}</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="col-md-4">
+            <!-- Actions Card -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'attendance:attendance_update' record.pk %}" class="btn btn-warning">
+                            <i class="fas fa-edit mr-2"></i> Edit Record
+                        </a>
+                        {% if request.user.is_superuser or request.user.is_staff %}
+                        <a href="{% url 'attendance:attendance_delete' record.pk %}" class="btn btn-danger">
+                            <i class="fas fa-trash mr-2"></i> Delete Record
+                        </a>
+                        {% endif %}
+                        <a href="{% url 'attendance:attendance_list' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left mr-2"></i> Back to List
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Record Info -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Record Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">Created</h6>
+                                <small>{{ record.created_at|date:"M d, Y H:i" }}</small>
+                            </div>
+                        </div>
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">Last Updated</h6>
+                                <small>{{ record.updated_at|date:"M d, Y H:i" }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.avatar-circle {
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+</style>
+{% endblock %} 

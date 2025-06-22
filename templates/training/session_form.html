@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        {% if form.instance.pk %}
+                        Edit Training Session
+                        {% else %}
+                        New Training Session
+                        {% endif %}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <div class="row">
+                            <!-- Title -->
+                            <div class="col-md-12 mb-3">
+                                <label for="{{ form.title.id_for_label }}" class="form-label">Title</label>
+                                {{ form.title }}
+                                {% if form.title.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.title.errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Topic -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.topic.id_for_label }}" class="form-label">Topic</label>
+                                {{ form.topic }}
+                                {% if form.topic.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.topic.errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Meeting Link -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.meeting_link.id_for_label }}" class="form-label">Meeting Link</label>
+                                {{ form.meeting_link }}
+                                {% if form.meeting_link.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.meeting_link.errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Date -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.date.id_for_label }}" class="form-label">Date</label>
+                                {{ form.date }}
+                                {% if form.date.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.date.errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Time -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.time.id_for_label }}" class="form-label">Time</label>
+                                {{ form.time }}
+                                {% if form.time.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.time.errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Description -->
+                            <div class="col-md-12 mb-3">
+                                <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                                {{ form.description }}
+                                {% if form.description.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.description.errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Resources -->
+                            <div class="col-md-12 mb-3">
+                                <label for="{{ form.resources.id_for_label }}" class="form-label">Resources</label>
+                                {{ form.resources }}
+                                {% if form.resources.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.resources.errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                                <small class="form-text text-muted">Add any relevant resources, links, or materials for the session.</small>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Assigned Employees -->
+                            <div class="col-md-12 mb-3">
+                                <label for="{{ form.assigned_employees.id_for_label }}" class="form-label">Assigned Employees</label>
+                                {{ form.assigned_employees }}
+                                {% if form.assigned_employees.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.assigned_employees.errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                                <small class="form-text text-muted">Select employees to assign to this training session.</small>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'training:session_list' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left mr-2"></i> Back to List
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save mr-2"></i>
+                                {% if form.instance.pk %}
+                                Update Session
+                                {% else %}
+                                Create Session
+                                {% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Style form fields */
+.form-control {
+    border-radius: 0.25rem;
+    border: 1px solid #ced4da;
+    padding: 0.5rem 0.75rem;
+}
+
+.form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Style textarea */
+textarea.form-control {
+    min-height: 100px;
+    resize: vertical;
+}
+</style>
+{% endblock %} 

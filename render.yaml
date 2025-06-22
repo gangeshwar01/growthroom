@@ -1,0 +1,23 @@
+databases:
+  - name: growthroom_db
+    databaseName: growthroom_db
+    user: growthroom_user
+    plan: free
+
+services:
+  - type: web
+    name: growthroom
+    runtime: python
+    pythonVersion: '3.12'
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn growthroom.wsgi:application"
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: growthroom_db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4 

@@ -1,0 +1,292 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}GrowthRoom{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --sidebar-width: 250px;
+        }
+        
+        body {
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            background-color: #2c3e50;
+            color: white;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .sidebar-header {
+            padding: 1rem;
+            background-color: #0d0e0e;
+        }
+        
+        .sidebar-header .logo {
+            max-height: 110px;
+            width: auto;
+            object-fit: contain;
+        }
+        
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+        
+        .sidebar-menu .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .sidebar-menu .nav-link:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-menu .nav-link.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid #3498db;
+        }
+        
+        .sidebar-menu .nav-link i {
+            width: 20px;
+            margin-right: 10px;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        /* Navbar Styles */
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .user-dropdown .dropdown-toggle::after {
+            display: none;
+        }
+        
+        .user-dropdown .dropdown-menu {
+            border: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .sidebar {
+                margin-left: calc(-1 * var(--sidebar-width));
+            }
+            
+            .sidebar.active {
+                margin-left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .main-content.active {
+                margin-left: var(--sidebar-width);
+            }
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            {% if request.user.is_superuser or request.user.is_staff %}
+            <a href="{% url 'dashboard' %}" class="d-flex justify-content-center align-items-center">
+                {% else %}
+                <a href="{% url 'employee_portal:emp_dashboard' %}" class="d-flex justify-content-center align-items-center">
+                {% endif %}
+                <img src="{% static 'images/logo.png' %}" alt="GrowthRoom Logo" class="logo">
+            </a>
+        </div>
+        <div class="sidebar-menu">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    {% if request.user.is_superuser or request.user.is_staff %}
+                    <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">
+                        <i class="fas fa-home"></i> Dashboard
+                    </a>
+                    {% else %}
+                    <a class="nav-link {% if request.resolver_match.url_name == 'emp_dashboard' %}active{% endif %}" href="{% url 'employee_portal:emp_dashboard' %}">
+                        <i class="fas fa-home"></i> Dashboard
+                    </a>
+                    {% endif %}
+                </li>
+                {% if request.user.is_superuser or request.user.is_staff %}
+                <li class="nav-item">
+                    <a class="nav-link {% if 'profile' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'accounts:profile_list' %}">
+                        <i class="fas fa-users"></i> Employees
+                    </a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link {% if 'attendance' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'attendance:attendance_home' %}">
+                        <i class="fas fa-calendar-check"></i> Attendance
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if 'training' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'training:training_home' %}">
+                        <i class="fas fa-chalkboard-teacher"></i> Training
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if 'project' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'tasks:project_list' %}">
+                        <i class="fas fa-project-diagram"></i> Projects
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if 'task' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'tasks:task_list' %}">
+                        <i class="fas fa-tasks"></i> Tasks
+                    </a>
+                </li>
+                <li class="nav-item">
+                    {% if request.user.is_superuser or request.user.is_staff %}
+                    <a class="nav-link {% if 'performance' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'performance:performance_home' %}">
+                        <i class="fas fa-chart-line"></i> Performance
+                    </a>
+                    {% else %}
+                    <a class="nav-link {% if 'performance' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'performance:my_performance' %}">
+                        <i class="fas fa-user-check"></i> My Performance
+                    </a>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg mb-4">
+            <div class="container-fluid">
+                <button class="btn btn-link text-dark d-md-none" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <div class="ms-auto d-flex align-items-center">
+                    <div class="dropdown user-dropdown">
+                        <button class="btn btn-link text-dark dropdown-toggle d-flex align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="avatar-circle bg-primary text-white me-2" style="width: 32px; height: 32px;">
+                                {{ request.user.username|make_list|first|upper }}
+                            </div>
+                            <span>{{ request.user.get_full_name|default:request.user.username }}</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            {% if request.user.is_authenticated %}
+                                {% if request.user.profile %}
+                                <li><a class="dropdown-item" href="{% url 'accounts:profile_detail' request.user.profile.pk %}">
+                                    <i class="fas fa-user mr-2"></i> Profile
+                                </a></li>
+                                <li><a class="dropdown-item" href="{% url 'accounts:profile_update' request.user.profile.pk %}">
+                                    <i class="fas fa-cog mr-2"></i> Settings
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                {% endif %}
+                                <li><a class="dropdown-item text-danger" href="{% if request.user.is_superuser or request.user.is_staff %}{% url 'accounts:accounts_logout' %}{% else %}{% url 'employee_portal:logout' %}{% endif %}">
+                                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                                </a></li>
+                            {% else %}
+                                <li><a class="dropdown-item" href="{% url 'accounts:accounts_login' %}">
+                                    <i class="fas fa-sign-in-alt mr-2"></i> Login
+                                </a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Page Content -->
+        <div class="container-fluid mt-4">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Sidebar Toggle
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+            document.querySelector('.main-content').classList.toggle('active');
+        });
+        
+        // Close sidebar on mobile when clicking outside
+        document.addEventListener('click', function(event) {
+            const sidebar = document.querySelector('.sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            
+            if (window.innerWidth < 768 && 
+                !sidebar.contains(event.target) && 
+                !sidebarToggle.contains(event.target) && 
+                sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+                document.querySelector('.main-content').classList.remove('active');
+            }
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 
