@@ -7,7 +7,9 @@ databases:
 services:
   - type: web
     name: growthroom
-    runtime: python
+    env: python
+    buildCommand: rm -rf staticfiles && pip install -r requirements.txt && python manage.py collectstatic --noinput
+    startCommand: python manage.py migrate && python manage.py createsu && gunicorn employee_portal.wsgi:application
     pythonVersion: '3.12'
     plan: free
     envVars:
@@ -25,3 +27,8 @@ services:
         value: admin@growthroom.com
       - key: DJANGO_SUPERUSER_PASSWORD
         value: admin
+#
+Django superuser credentials for first-time setup:
+Username: admin
+Password: admin
+Email: admin@example.com
