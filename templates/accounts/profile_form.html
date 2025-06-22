@@ -29,11 +29,11 @@
                         </div>
 
                         <div class="mb-3">
-                            {{ form.bio.label_tag }}
-                            {{ form.bio }}
-                             {% if form.bio.errors %}
+                            {{ form.location.label_tag }}
+                            {{ form.location }}
+                             {% if form.location.errors %}
                             <div class="invalid-feedback d-block">
-                                {{ form.bio.errors|striptags }}
+                                {{ form.location.errors|striptags }}
                             </div>
                             {% endif %}
                         </div>

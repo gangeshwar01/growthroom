@@ -46,33 +46,33 @@ A comprehensive Django-based employee management system designed to streamline H
    ```
 
 2. **Create and activate virtual environment**
-   ```bash
-   python -m venv venv
+```bash
+python -m venv venv
    # On Windows
    venv\Scripts\activate
    # On macOS/Linux
    source venv/bin/activate
-   ```
+```
 
 3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+```bash
+pip install -r requirements.txt
+```
 
 4. **Run migrations**
-   ```bash
-   python manage.py migrate
-   ```
+```bash
+python manage.py migrate
+```
 
 5. **Create superuser**
-   ```bash
-   python manage.py createsuperuser
-   ```
+```bash
+python manage.py createsuperuser
+```
 
 6. **Run development server**
-   ```bash
-   python manage.py runserver
-   ```
+```bash
+python manage.py runserver
+```
 
 7. **Access the application**
    - Main application: http://127.0.0.1:8000/
