@@ -7,10 +7,10 @@ databases:
 services:
   - type: web
     name: growthroom
-    runtime: python
+    env: python
+    buildCommand: rm -rf staticfiles && pip install -r requirements.txt && python manage.py collectstatic --noinput
+    startCommand: python manage.py migrate && python manage.py createsuperuser && gunicorn growthroom.wsgi:application
     pythonVersion: '3.12'
-    buildCommand: "./build.sh"
-    startCommand: "gunicorn growthroom.wsgi:application"
     plan: free
     envVars:
       - key: DATABASE_URL
@@ -21,12 +21,16 @@ services:
         generateValue: true
       - key: WEB_CONCURRENCY
         value: 4
+      - key: ALLOWED_HOSTS
+        value: growthroom.onrender.com
       - key: DJANGO_SUPERUSER_USERNAME
         value: admin
       - key: DJANGO_SUPERUSER_EMAIL
         value: admin@growthroom.com
       - key: DJANGO_SUPERUSER_PASSWORD
         value: admin
-    postDeployCommand: |
-      python manage.py migrate
-      python manage.py createsuperuser --noinput --username admin --email admin@growthroom.com || true 
+#
+Django superuser credentials for first-time setup:
+Username: admin
+Password: admin
+Email: admin@example.com
