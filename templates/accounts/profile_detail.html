@@ -117,6 +117,7 @@
                     </div>
                 </div>
             </div>
+
             {% if not request.user.is_superuser or request.user.is_staff %}
             {# Profile Issue Section #}
             {% if issue_form %}
@@ -140,6 +141,7 @@
         </div>
     </div>
 </div>
+{% endif %}
 
 <style>
 .avatar-circle {
