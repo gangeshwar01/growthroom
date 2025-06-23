@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth.decorators import login_required
@@ -35,6 +35,9 @@ def accounts_home(request):
 
 def profile_list(request):
     profiles = Profile.objects.all()
+    open_issues_dict = {}
+    if request.user.is_superuser or request.user.is_staff:
+        profiles = profiles.annotate(open_issues_count=Count('issues', filter=Q(issues__status='open')))
     return render(request, 'accounts/profile_list.html', {'profiles': profiles})
 
 @login_required
