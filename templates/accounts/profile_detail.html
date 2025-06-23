@@ -47,6 +47,39 @@
 
         <div class="col-md-8">
 
+            {# Show profile issues to admin/staff #}
+            {% if profile_issues %}
+            <div class="card mb-4">
+                <div class="card-header bg-warning">
+                    <h5 class="mb-0">Raised Concerns</h5>
+                </div>
+                <div class="card-body">
+                    {% if profile_issues %}
+                        {% if profile_issues|length == 0 %}
+                            <p class="text-muted">No concerns have been raised for this profile.</p>
+                        {% else %}
+                            <ul class="list-group">
+                                {% for issue in profile_issues %}
+                                <li class="list-group-item">
+                                    <strong>Status:</strong> <span class="badge bg-{{ issue.status == 'open'|yesno:'danger,success' }}">{{ issue.status|capfirst }}</span><br>
+                                    <strong>Submitted:</strong> {{ issue.created_at|date:"F d, Y H:i" }}<br>
+                                    <strong>Description:</strong> {{ issue.description|linebreaksbr }}
+                                    {% if issue.status == 'open' and request.user.is_superuser or request.user.is_staff %}
+                                        <form method="post" class="mt-2 d-inline">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="resolve_issue_id" value="{{ issue.id }}">
+                                            <button type="submit" class="btn btn-success btn-sm">Mark as Resolved</button>
+                                        </form>
+                                    {% endif %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
             <!-- Activity Timeline -->
             <div class="card mb-4">
                 <div class="card-header">

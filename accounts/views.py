@@ -42,6 +42,16 @@ def profile_detail(request, pk):
     profile = get_object_or_404(Profile, pk=pk)
     issue_form = None
     issue_submitted = False
+    profile_issues = None
+    if request.user.is_superuser or request.user.is_staff:
+        profile_issues = profile.issues.all().order_by('-created_at')
+        # Handle resolving an issue
+        if request.method == 'POST' and request.POST.get('resolve_issue_id'):
+            issue_id = request.POST.get('resolve_issue_id')
+            issue = profile.issues.filter(id=issue_id).first()
+            if issue and issue.status == 'open':
+                issue.status = 'resolved'
+                issue.save()
     if request.user == profile.user:
         if request.method == 'POST' and 'raise_issue' in request.POST:
             issue_form = ProfileIssueForm(request.POST)
@@ -56,6 +66,7 @@ def profile_detail(request, pk):
         'profile': profile,
         'issue_form': issue_form,
         'issue_submitted': issue_submitted,
+        'profile_issues': profile_issues,
     })
 
 def profile_create(request):
