@@ -52,6 +52,12 @@ def profile_detail(request, pk):
             if issue and issue.status == 'open':
                 issue.status = 'resolved'
                 issue.save()
+        # Handle deleting an issue
+        if request.method == 'POST' and request.POST.get('delete_issue_id'):
+            issue_id = request.POST.get('delete_issue_id')
+            issue = profile.issues.filter(id=issue_id).first()
+            if issue:
+                issue.delete()
     if request.user == profile.user:
         if request.method == 'POST' and 'raise_issue' in request.POST:
             issue_form = ProfileIssueForm(request.POST)

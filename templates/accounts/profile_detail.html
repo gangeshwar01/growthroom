@@ -77,6 +77,13 @@
                                             <button type="submit" class="btn btn-success btn-sm">Mark as Resolved</button>
                                         </form>
                                     {% endif %}
+                                    {% if issue.status == 'resolved' and request.user.is_superuser or request.user.is_staff %}
+                                        <form method="post" class="mt-2 d-inline" onsubmit="return confirm('Are you sure you want to delete this issue?');">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="delete_issue_id" value="{{ issue.id }}">
+                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        </form>
+                                    {% endif %}
                                 </li>
                                 {% endfor %}
                             </ul>
@@ -110,7 +117,7 @@
                     </div>
                 </div>
             </div>
-
+            {% if not request.user.is_superuser or request.user.is_staff %}
             {# Profile Issue Section #}
             {% if issue_form %}
             <div class="card mt-4">
