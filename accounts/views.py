@@ -43,8 +43,10 @@ def profile_detail(request, pk):
     issue_form = None
     issue_submitted = False
     profile_issues = None
+    open_issues_count = 0
     if request.user.is_superuser or request.user.is_staff:
         profile_issues = profile.issues.all().order_by('-created_at')
+        open_issues_count = profile.issues.filter(status='open').count()
         # Handle resolving an issue
         if request.method == 'POST' and request.POST.get('resolve_issue_id'):
             issue_id = request.POST.get('resolve_issue_id')
@@ -73,6 +75,7 @@ def profile_detail(request, pk):
         'issue_form': issue_form,
         'issue_submitted': issue_submitted,
         'profile_issues': profile_issues,
+        'open_issues_count': open_issues_count,
     })
 
 def profile_create(request):
