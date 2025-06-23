@@ -61,7 +61,13 @@
                             <ul class="list-group">
                                 {% for issue in profile_issues %}
                                 <li class="list-group-item">
-                                    <strong>Status:</strong> <span class="badge bg-{{ issue.status == 'open'|yesno:'danger,success' }}">{{ issue.status|capfirst }}</span><br>
+                                    <strong>Status:</strong>
+                                    {% if issue.status == 'open' %}
+                                        <span class="badge bg-danger">{{ issue.status|capfirst }}</span>
+                                    {% else %}
+                                        <span class="badge bg-success">{{ issue.status|capfirst }}</span>
+                                    {% endif %}
+                                    <br>
                                     <strong>Submitted:</strong> {{ issue.created_at|date:"F d, Y H:i" }}<br>
                                     <strong>Description:</strong> {{ issue.description|linebreaksbr }}
                                     {% if issue.status == 'open' and request.user.is_superuser or request.user.is_staff %}
