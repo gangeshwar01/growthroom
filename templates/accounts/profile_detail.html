@@ -121,7 +121,7 @@
                 </div>
             </div>
 
-            {% if request.user == profile.user %}
+            {% if request.user == profile.user and not request.user.is_superuser %}
             {# Profile Issue Section #}
             {% if issue_form %}
             <div class="card mt-4">
