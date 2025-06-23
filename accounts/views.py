@@ -6,8 +6,8 @@ from datetime import timedelta
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
-from .models import Profile
-from .forms import ProfileForm, UserProfileCreationForm
+from .models import Profile, ProfileIssue
+from .forms import ProfileForm, UserProfileCreationForm, ProfileIssueForm
 
 # Create your views here.
 
@@ -37,9 +37,26 @@ def profile_list(request):
     profiles = Profile.objects.all()
     return render(request, 'accounts/profile_list.html', {'profiles': profiles})
 
+@login_required
 def profile_detail(request, pk):
     profile = get_object_or_404(Profile, pk=pk)
-    return render(request, 'accounts/profile_detail.html', {'profile': profile})
+    issue_form = None
+    issue_submitted = False
+    if request.user == profile.user:
+        if request.method == 'POST' and 'raise_issue' in request.POST:
+            issue_form = ProfileIssueForm(request.POST)
+            if issue_form.is_valid():
+                issue = issue_form.save(commit=False)
+                issue.profile = profile
+                issue.save()
+                issue_submitted = True
+        else:
+            issue_form = ProfileIssueForm()
+    return render(request, 'accounts/profile_detail.html', {
+        'profile': profile,
+        'issue_form': issue_form,
+        'issue_submitted': issue_submitted,
+    })
 
 def profile_create(request):
     if request.method == 'POST':

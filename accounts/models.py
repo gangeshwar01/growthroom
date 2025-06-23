@@ -24,3 +24,13 @@ from django.dispatch import receiver
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
+
+class ProfileIssue(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='issues')
+    description = models.TextField()
+    status = models.CharField(max_length=20, choices=[('open', 'Open'), ('resolved', 'Resolved')], default='open')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Issue for {self.profile.user.username} - {self.status}"

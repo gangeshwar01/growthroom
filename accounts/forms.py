@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, ProfileIssue
 
 class ProfileForm(forms.ModelForm):
     bio = forms.CharField(label="Name", required=False, widget=forms.TextInput(attrs={'placeholder': 'Full Name'}))
@@ -30,4 +30,14 @@ class UserProfileCreationForm(UserCreationForm):
             location=self.cleaned_data.get('location', ''),
             birth_date=self.cleaned_data.get('birth_date', None),
         )
-        return user 
+        return user
+
+class ProfileIssueForm(forms.ModelForm):
+    description = forms.CharField(
+        label="Describe the issue",
+        widget=forms.Textarea(attrs={'rows': 4, 'placeholder': 'Describe the mistake in your profile...'}),
+        required=True
+    )
+    class Meta:
+        model = ProfileIssue
+        fields = ['description'] 
