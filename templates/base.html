@@ -229,9 +229,11 @@
                                 <li><a class="dropdown-item" href="{% url 'accounts:profile_detail' request.user.profile.pk %}">
                                     <i class="fas fa-user mr-2"></i> Profile
                                 </a></li>
+                                {% if request.user.is_superuser or request.user.is_staff %}
                                 <li><a class="dropdown-item" href="{% url 'accounts:profile_update' request.user.profile.pk %}">
                                     <i class="fas fa-cog mr-2"></i> Settings
                                 </a></li>
+                                {% endif %}
                                 <li><hr class="dropdown-divider"></li>
                                 {% endif %}
                                 <li><a class="dropdown-item text-danger" href="{% if request.user.is_superuser or request.user.is_staff %}{% url 'accounts:accounts_logout' %}{% else %}{% url 'employee_portal:logout' %}{% endif %}">
