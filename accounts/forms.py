@@ -1,7 +1,8 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from .models import Profile, ProfileIssue
+from django.contrib.auth import authenticate
 
 class ProfileForm(forms.ModelForm):
     bio = forms.CharField(label="Name", required=False, widget=forms.TextInput(attrs={'placeholder': 'Full Name'}))
@@ -40,4 +41,12 @@ class ProfileIssueForm(forms.ModelForm):
     )
     class Meta:
         model = ProfileIssue
-        fields = ['description'] 
+        fields = ['description']
+
+class StaffAuthenticationForm(AuthenticationForm):
+    def confirm_login_allowed(self, user):
+        if not user.is_active or not user.is_staff:
+            raise forms.ValidationError(
+                "Invalid username or password.",
+                code='invalid_login',
+            ) 
