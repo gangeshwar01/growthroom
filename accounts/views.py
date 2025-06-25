@@ -120,7 +120,9 @@ def login_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
-        if user is not None:
+        if (not(request.user.is_superuser or request.user.is_staff)):
+            messages.error(request, 'Invalid username or password.')
+        elif(user is not None):
             login(request, user)
             messages.success(request, 'Successfully logged in.')
             return redirect('dashboard')
