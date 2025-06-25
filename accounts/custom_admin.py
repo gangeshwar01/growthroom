@@ -1,6 +1,8 @@
 from django.contrib.admin import AdminSite
 from accounts.forms import StaffAuthenticationForm
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import User, Group
+from django.contrib.auth.admin import UserAdmin, GroupAdmin
 
 # Import all models that exist
 from accounts.models import ProfileIssue, Profile
@@ -36,4 +38,8 @@ custom_admin_site.register(Comment)
 custom_admin_site.register(PerformanceReview)
 
 # Register models from certificates app
-custom_admin_site.register(CertificateRequest) 
+custom_admin_site.register(CertificateRequest)
+
+# Register built-in User and Group models
+custom_admin_site.register(User, UserAdmin)
+custom_admin_site.register(Group, GroupAdmin) 
