@@ -110,7 +110,6 @@ def profile_delete(request, pk):
     return render(request, 'accounts/profile_confirm_delete.html', {'profile': profile})
 
 def login_view(request):
-    # Clear any existing messages when first loading the login page
     if request.method == 'GET':
         storage = messages.get_messages(request)
         storage.used = True
@@ -120,7 +119,7 @@ def login_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
-        if request.user.is_superuser or request.user.is_staff:
+        if user is not None and (user.is_staff or user.is_superuser):
             login(request, user)
             messages.success(request, 'Successfully logged in.')
             return redirect('dashboard')
